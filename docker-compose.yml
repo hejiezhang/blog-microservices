@@ -1,0 +1,39 @@
+version: '3.8'
+services:
+  postgres-user:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: userdb
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - user-db:/var/lib/postgresql/data
+
+  postgres-post:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: postdb
+      POSTGRES_USER: post
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5433:5432"
+    volumes:
+      - post-db:/var/lib/postgresql/data
+
+  postgres-comment:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: commentdb
+      POSTGRES_USER: comment
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5434:5432"
+    volumes:
+      - comment-db:/var/lib/postgresql/data
+
+volumes:
+  user-db:
+  post-db:
+  comment-db:
