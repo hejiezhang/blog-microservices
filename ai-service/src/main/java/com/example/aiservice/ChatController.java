@@ -3,6 +3,8 @@ package com.example.aiservice;
 import com.example.aiservice.client.PostClient;
 import com.example.aiservice.dto.PostDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import java.util.regex.Pattern;
 @RestController()
 @RequestMapping("/ai")
 public class ChatController {
+    private static final Logger log = LoggerFactory.getLogger(ChatController.class);
 
     @Autowired
     private ChatClient chatClient;
@@ -35,6 +38,7 @@ public class ChatController {
 
     @GetMapping("/generatePost")
     public PostDto generatePost(@RequestParam String topic) {
+        log.info("Generating AI post for topic: {}", topic);
         // Step 1: Build prompt
         String prompt = String.format("""
                 You are an expert blog writer.
@@ -54,7 +58,7 @@ public class ChatController {
                 }
                 """, topic);
 
-        System.out.println(prompt);
+        //System.out.println(prompt);
 
         // Step 2: Call AI model
         ChatResponse response = chatClient
@@ -83,7 +87,7 @@ public class ChatController {
                     .replaceAll("\n", " ")
                     .trim();
 
-            System.out.println(aiText);
+            //System.out.println(aiText);
 
             generatedPost = mapper.readValue(aiText, PostDto.class);
         } catch (Exception e) {
@@ -101,6 +105,7 @@ public class ChatController {
 
     @GetMapping("/generateComment")
     public String generateComment(@RequestParam Long postId) {
+        log.info("Generating AI Comment for postId: {}", postId);
         // 1. Get post content
         PostDto post = postClient.getPostById(postId);
 
@@ -114,7 +119,7 @@ public class ChatController {
                 Post Content: %s
                 """, post.getTitle(), post.getContent());
 
-        System.out.println(prompt);
+        //System.out.println(prompt);
 
         // 3. Call AI model
         ChatResponse response = chatClient

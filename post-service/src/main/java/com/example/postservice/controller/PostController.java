@@ -3,6 +3,8 @@ package com.example.postservice.controller;
 import com.example.postservice.model.Post;
 import com.example.postservice.repository.PostRepository;
 import com.example.postservice.client.UserClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +15,8 @@ import java.util.Map;
 @RestController
 @RequestMapping("/posts")
 public class PostController {
+  private static final Logger log = LoggerFactory.getLogger(PostController.class);
+
   private final PostRepository repo;
   private final UserClient userClient;
 
@@ -29,6 +33,9 @@ public class PostController {
 
   @GetMapping("/{id}/with-author")
   public ResponseEntity<?> getWithAuthor(@PathVariable("id") Long id) {
+
+    log.info("Fetching post with author, postId={}", id);
+
     return repo.findById(id).map(p -> {
       Object author = null;
       try { author = userClient.getUserById(p.getAuthorId()); } catch (Exception e) { author = Map.of("error","unable to fetch user"); }

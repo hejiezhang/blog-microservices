@@ -4,6 +4,8 @@ import com.example.commentservice.model.Comment;
 import com.example.commentservice.repository.CommentRepository;
 import com.example.commentservice.client.PostClient;
 import com.example.commentservice.client.UserClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +15,8 @@ import java.util.Map;
 @RestController
 @RequestMapping("/comments")
 public class CommentController {
+  private static final Logger log = LoggerFactory.getLogger(CommentController.class);
+
   private final CommentRepository repo;
   private final PostClient postClient;
   private final UserClient userClient;
@@ -31,6 +35,9 @@ public class CommentController {
 
   @GetMapping("/post/{postId}")
   public ResponseEntity<?> byPost(@PathVariable("postId") Long postId) {
+
+    log.info("Fetching comments for postId={}", postId);
+
     List<Comment> comments = repo.findByPostId(postId);
     Object post = null;
     try { post = postClient.getPostById(postId); } catch (Exception e) { post = Map.of("error","unable to fetch post"); }
