@@ -8,9 +8,11 @@ import org.springframework.ai.chat.memory.MessageWindowChatMemory;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
+@EnableFeignClients
 public class AiServiceApplication {
 
     public static void main(String[] args) {
@@ -27,7 +29,7 @@ public class AiServiceApplication {
     }
 
     /*@Bean
-    public ChatClient ragClient(ChatModel chatModel) {
+    public ChatClient chatClient(ChatModel chatModel) {
         ChatClient.Builder builder = ChatClient.builder(chatModel);
         return builder.build();
     }*/
